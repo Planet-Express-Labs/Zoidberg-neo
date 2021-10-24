@@ -23,7 +23,7 @@ class Stonks(commands.Cog):
     )
     async def stonk(self, ctx, stonk):
         stonk="".join([letter for letter in stonk.upper() if letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'])
-        if not len(stonk) in [3,4]:
+        if not len(stonk) in [2,3,4]:
             await ctx.response.send_message("Uh oh... I don't think that's a stonk!")
             return
         response=requests.get(f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={stonk}", headers = {
