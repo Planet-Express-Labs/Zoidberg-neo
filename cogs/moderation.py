@@ -8,7 +8,7 @@ from disnake import Option, OptionType
 from disnake.ext.commands.errors import CommandInvokeError
 
 
-class Cog(commands.Cog):
+class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
 
@@ -148,4 +148,4 @@ class Cog(commands.Cog):
         await ctx.response.send_message(f"Deleted {limit} messages from {channel.mention}.")
 
 def setup(bot):
-    bot.add_cog(Cog(bot))
+    bot.add_cog(Moderation(bot))
