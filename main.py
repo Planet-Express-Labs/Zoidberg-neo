@@ -15,7 +15,7 @@ intents.members = True
 bot = commands.Bot(command_prefix='-=',
                    activity=activity,
                    intents=intents,
-                   testing_guilds=TEST_GUILDS)
+                   test_guilds=TEST_GUILDS)
 
 disabled_cogs = []
 logging.basicConfig(level=logging.INFO)
