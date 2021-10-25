@@ -63,7 +63,7 @@ class Stonks(commands.Cog):
         for coin in self.crypto_list:
             if crypto in coin.values():
                 try:
-                    data = await requests.get(f"https://api.coingecko.com/api/v3/coins/{coin['id']}").json()
+                    data = (await requests.get(f"https://api.coingecko.com/api/v3/coins/{coin['id']}")).json()
                     ticker = data['symbol'].upper()
                     name = data['name']
                     price = data['market_data']['current_price']['usd']
