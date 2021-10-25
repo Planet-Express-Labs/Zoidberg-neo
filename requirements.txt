@@ -1,2 +1,4 @@
 disnake
 asyncio
+azure-cognitiveservices-vision-contentmoderator
+requests-async

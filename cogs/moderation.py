@@ -9,14 +9,14 @@ from disnake import Option, OptionType
 
 class Moderation(commands.Cog):
     def __init__(self, bot):
-        self.bot=bot
+        self.bot = bot
 
     @commands.slash_command(
-        description = "Gets user info",
+        description="Gets user info",
         options=[
-            Option("user", "User to get info for. Much wow.", OptionType.user, required=True)
+            Option("user", "User to get info for.", OptionType.user, required=True)
         ],
-        name = "user-info"
+        name="user-info"
     )
     async def user_info(self, ctx, user=None):
         badges = {
@@ -34,7 +34,6 @@ class Moderation(commands.Cog):
         created_at = str(user.created_at)[:-7]
         reply = disnake.Embed(color=disnake.Color.blurple())
         reply.title = str(user)
-        print(user)
         reply.set_thumbnail(url=user.display_avatar)
         reply.add_field(
             name="Registration",
@@ -65,23 +64,24 @@ class Moderation(commands.Cog):
             Option("footer_url", "URL of the footer image", OptionType.string)
         ]
     )
-    async def embed(self, ctx, channel=None, title=None, description=None, color=None, image_url=None, footer=None, footer_url=None):
+    async def embed(self, ctx, channel=None, title=None, description=None, color=None, image_url=None, footer=None,
+                    footer_url=None):
         if color is not None:
-            color=await commands.ColorConverter().convert(ctx, color)
+            color = await commands.ColorConverter().convert(ctx, color)
         else:
-            color=disnake.Color.default()
-        embed=disnake.Embed(color=color)
+            color = disnake.Color.default()
+        embed = disnake.Embed(color=color)
         if title is not None:
-            embed.title=title
+            embed.title = title
         if description is not None:
-            embed.description=description
+            embed.description = description
         if image_url is not None:
             embed.set_image(url=image_url)
-        footer_args={}
+        footer_args = {}
         if footer is not None:
-            footer_args['text']=footer
+            footer_args['text'] = footer
         if footer_url is not None:
-            footer_args['icon_url']=footer_url
+            footer_args['icon_url'] = footer_url
         if footer_args:
             embed.set_footer(**footer_args)
         if channel is None:
@@ -90,22 +90,49 @@ class Moderation(commands.Cog):
             await ctx.response.send_message("Sent!")
             await channel.send(embed=embed)
 
-
     @commands.has_permissions(ban_members=True)
     @commands.slash_command(
         name="ban",
         description="Ban user",
-        options=[Option("user", "User to ban", OptionType.user, required=True)]
+        options=[
+                Option("user", "User to ban", OptionType.user, required=True),
+                Option("purge", "Number of days to purge messages. ", OptionType.string),
+                Option("reason", "Reason for the ban", OptionType.string)
+                ]
     )
-    async def ban(self, ctx, user):
+    async def ban(self, ctx, user, reason=None, purge=0):
         try:
-            await user.ban(reason="ur mom")
-            await ctx.response.send_message(f"{user.mention} has been banned!\n\nhttps://tenor.com/bgcu3.gif")
+            await ctx.guild.ban(user=user, reason=reason, delete_message_days=purge)
+            await ctx.response.send_message(f"Success! {user.name} has been banned. ")
         except disnake.errors.Forbidden:
-            await ctx.response.send_message(f"Uh oh, you can't do that! Everyone, mock {ctx.author.mention}!")
-        except:
-            await ctx.response.send_message("Something went wrong.")
-    
+            await ctx.response.send_message(f"I do not have permission to execute this command!")
+
+    @commands.has_permissions(manage_messages=True)
+    @commands.slash_command(
+        name="purge",
+        description="Deletes a lot of messages. How many messages? A lot!",
+        options=[
+            Option("limit", "Number of messages to delete", OptionType.integer, required=True),
+            Option("user", "Who's messages to delete", OptionType.user),
+            Option("channel", "Channel from which to delete the messages.", OptionType.channel)
+        ]
+    )
+    async def purge(self, ctx, limit, user=None, channel=None):
+        if channel is None:
+            channel = ctx.channel
+        messages = []
+        if user is None:
+            await channel.purge(limit=limit)
+        else:
+            async for message in channel.history():
+                if len(messages) == limit:
+                    break
+                if message.author == user:
+                    messages.append(message)
+            await channel.delete_messages(messages)
+        await ctx.response.send_message(f"Deleted {limit} messages from {channel.mention}.", ephemeral=True)
+
+
     @commands.has_permissions(kick_members=True)
     @commands.slash_command(
         name="kick",
@@ -115,36 +142,9 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, user):
         try:
             await user.kick()
-            await ctx.response.send_message(f"{user.mention} has been kicked!\n\nSayonara, motherfucker")
+            await ctx.response.send_message(f"{user.mention} has been kicked successfully.")
         except disnake.errors.Forbidden:
-            await ctx.response.send_message(f"Uh oh, you can't do that! Everyone, mock {ctx.author.mention}!")
-        except:
-            await ctx.response.send_message("Something went wrong.")
-
-    @commands.has_permissions(manage_messages=True)
-    @commands.slash_command(
-        name="purge",
-        description="Deletes a lot of messages. How many messages? A lot!",
-        options=[
-            Option("limit", "Number of messages to delete", OptionType.integer, required=True),
-            Option("user", "If only deleting messages from one user, who?", OptionType.user),
-            Option("channel", "Channel from which to delete the messages.", OptionType.channel)
-        ]
-    )
-    async def purge(self, ctx, limit, user=None, channel=None):
-        if channel is None:
-            channel=ctx.channel
-        messages=[]
-        if user is None:
-            await channel.purge(limit=limit)
-        else:
-            async for message in channel.history():
-                if len(messages)==limit:
-                    break
-                if message.author==user:
-                    messages.append(message)
-            await channel.delete_messages(messages)
-        await ctx.response.send_message(f"Deleted {limit} messages from {channel.mention}.")
+            await ctx.response.send_message(f"I do not have permission to execute this command!")
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

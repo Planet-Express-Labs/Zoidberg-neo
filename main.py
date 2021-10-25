@@ -4,7 +4,7 @@
 # As long as you are using my code in good faith, we will probably not have an issue with it.
 import disnake
 from disnake.ext import commands
-from frontman.config import *
+from zoidberg.config import *
 
 # define activity, playing status
 activity = disnake.Activity(name='> planetexpresslabs.io', type=disnake.ActivityType.playing)
