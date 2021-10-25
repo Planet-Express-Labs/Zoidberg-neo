@@ -17,7 +17,8 @@ bot = commands.Bot(command_prefix='-=',
                    intents=intents,
                    test_guilds=TEST_GUILDS)
 
-disabled_cogs = []
+#enable torturing if you hate yourself, and everyone in your server
+disabled_cogs = ['torture.py']
 logging.basicConfig(level=logging.INFO)
 
 for filename in os.listdir("cogs"):

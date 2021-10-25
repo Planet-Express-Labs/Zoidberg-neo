@@ -5,7 +5,6 @@
 import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
-from disnake.ext.commands.errors import CommandInvokeError
 
 
 class Moderation(commands.Cog):
