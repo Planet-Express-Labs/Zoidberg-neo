@@ -6,13 +6,14 @@ import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
 from disnake.ext.commands.errors import CommandInvokeError
-import requests_async as requests
+import requests_async
+import requests
 
 
 class Stonks(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.crypto_list = (await requests.get("https://api.coingecko.com/api/v3/coins/list")).json()
+        self.crypto_list = requests.get("https://api.coingecko.com/api/v3/coins/list").json()
 
     @commands.slash_command(
         name="stocks",
@@ -27,7 +28,7 @@ class Stonks(commands.Cog):
             await ctx.response.send_message("Uh oh... I don't think that's a stonk!")
             return
         # This might not be entirely necessary, but it is what it is.
-        response = await requests.get(f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={stonk}", headers={
+        response = await requests_async.get(f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={stonk}", headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
@@ -63,7 +64,7 @@ class Stonks(commands.Cog):
         for coin in self.crypto_list:
             if crypto in coin.values():
                 try:
-                    data = (await requests.get(f"https://api.coingecko.com/api/v3/coins/{coin['id']}")).json()
+                    data = (await requests_async.get(f"https://api.coingecko.com/api/v3/coins/{coin['id']}")).json()
                     ticker = data['symbol'].upper()
                     name = data['name']
                     price = data['market_data']['current_price']['usd']

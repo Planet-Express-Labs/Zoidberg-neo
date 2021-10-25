@@ -5,8 +5,6 @@
 import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
-import json
-
 
 class Torture(commands.Cog):
     def __init__(self, bot):
