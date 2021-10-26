@@ -1,7 +1,3 @@
-disnake
-asyncio
-requests
-requests_async
 beautifulsoup4
 Flask
 jsonschema
