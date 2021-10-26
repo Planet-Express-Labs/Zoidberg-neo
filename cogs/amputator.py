@@ -17,7 +17,11 @@ class Amputator(commands.Cog):
         if check_if_amp(message.content):
             reply=get_reply(message.content)
             if reply:
-                await message.reply(reply)
+                embed=disnake.Embed(color=1015649)
+                embed.description = reply
+                embed.set_footer(text="Zoidberg-Neo")
+                embed.set_author(name="Amputator", icon_url="https://raw.githubusercontent.com/KilledMufasa/AmputatorBot/master/img/amputatorbot_logo.png", url="https://github.com/KilledMufasa/AmputatorBot/")
+                await message.reply(embed=embed)
 
 def setup(bot):
     bot.add_cog(Amputator(bot))
