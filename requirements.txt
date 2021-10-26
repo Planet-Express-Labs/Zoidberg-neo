@@ -11,3 +11,4 @@ requests
 tldextract
 urlextract
 validators
+lxml

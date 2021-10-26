@@ -40,3 +40,4 @@ class CanonicalType(enum.Enum):
     SCHEMA_MAINENTITY = "schema_mainentity"
     TCO_PAGETITLE = "tco_pagetitle"
     GUESS_AND_CHECK = "guess_and_check"
+    META_REDIRECT = 'meta_redirect'

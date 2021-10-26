@@ -186,7 +186,7 @@ def get_page(url):
         current_url = req.url
 
         # Make the received data searchable
-        soup = BeautifulSoup(req.text, features="html.parser")
+        soup = BeautifulSoup(req.text, features="lxml")
         title = soup.title.string if soup.title else "Error: Title not found"
         page = Page(current_url, req.status_code, title, soup)
         return page

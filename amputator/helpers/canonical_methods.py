@@ -13,6 +13,8 @@ def get_canonical_with_soup(r, url, method, guess_and_check=False):
     if method == CanonicalType.REL:
         can_urls = get_can_urls(r.soup.find_all(rel='canonical'), 'href', url=url)
 
+    elif method == CanonicalType.META_REDIRECT:
+        can_urls= [r.soup.find('meta', attrs={'http-equiv': 'refresh'})['content'].partition('url=')[2]]
     # Find the canonical urls with method amp-canurl
     elif method == CanonicalType.CANURL:
         can_urls = get_can_urls(r.soup.find_all(a='amp-canurl'), 'href', url=url)
