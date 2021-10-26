@@ -137,7 +137,6 @@ def get_can_urls_meta_redirect(tags, url=None):
         if not 'content' in can_tag.attrs:
             continue
         value = can_tag.get('content')
-        print("VALUE",value)
         if not "url=" in value:
             continue
         value = value.partition("url=")[2]
