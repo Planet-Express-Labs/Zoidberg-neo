@@ -26,4 +26,4 @@ else:
 
     BOT_TOKEN = config.get("Bot", "bot_token")
     TEST_GUILDS = config.get("Bot", "testing_guilds").split(",")
-
+    DISABLED_COGS = config.get("Bot","disabled_cogs").split(", ")
