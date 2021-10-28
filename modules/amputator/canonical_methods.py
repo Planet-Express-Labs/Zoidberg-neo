@@ -1,7 +1,7 @@
 import re
 from urllib.parse import urlparse
 
-from utils.am import utils
+from utils import amputator_utils as utils
 from modules.amputator.models.link import CanonicalType
 
 
@@ -103,7 +103,7 @@ def get_can_url_with_guess_and_check(url):
                 guessed_page = utils.get_page(guessed_url)
                 if guessed_page:
                     if guessed_page.status_code == 200:
-                        article_similarity = utls.get_article_similarity(url, guessed_url)
+                        article_similarity = utils.get_article_similarity(url, guessed_url)
                         if article_similarity > 0.6:
                             return guessed_url
                         elif article_similarity > 0.35:

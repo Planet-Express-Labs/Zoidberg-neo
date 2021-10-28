@@ -20,10 +20,11 @@ class Images(commands.Cog):
         #     return await ctx.response.send_message("I can't find a valid URL. ")
         image = ffmpeg.input(url)
         image = ffmpeg.hue(image, s=saturation)
-        ffmpeg.output(image, 'temp.mp4')
-        with open('temp.mp4', 'r') as video:
-            await ctx.response.send_message("Here's your spicy, tender image:", file=video)
-        os.remove('temp.mp4')
+        ffmpeg.output(image, 'temp.jpg').run()
+        with open('temp.jpg', 'rb') as video:
+            df = disnake.File(video)
+            await ctx.response.send_message("Here's your spicy, tender image:", file=df)
+        os.remove('temp.jpg')
 
 
 def setup(bot):

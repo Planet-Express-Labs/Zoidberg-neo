@@ -245,10 +245,6 @@ def get_article_similarity(url1, url2, log_articles=False):
         article2.download()
         article2.parse()
         article2_text = article2.text
-
-        if log_articles:
-            log.debug(f"Article 1: {article1_text}\n\nArticle 2: {article2_text}")
-
         # Compare the two articles and return the ratio (0-1)
         return SequenceMatcher(None, article1_text, article2_text).ratio()
 
