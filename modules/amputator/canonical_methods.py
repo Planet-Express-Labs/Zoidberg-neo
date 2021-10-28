@@ -1,10 +1,9 @@
 import re
-import sys
-import traceback
 from urllib.parse import urlparse
 
-from amputator.helpers import utils
-from amputator.models.link import CanonicalType
+from utils.am import utils
+from modules.amputator.models.link import CanonicalType
+
 
 # Try to find the canonical url by scanning for the specified tag
 def get_canonical_with_soup(r, url, method, guess_and_check=False):
@@ -14,7 +13,7 @@ def get_canonical_with_soup(r, url, method, guess_and_check=False):
         can_urls = get_can_urls(r.soup.find_all(rel='canonical'), 'href', url=url)
 
     elif method == CanonicalType.META_REDIRECT:
-        can_urls= [r.soup.find('meta', attrs={'http-equiv': 'refresh'})['content'].partition('url=')[2]]
+        can_urls = [r.soup.find('meta', attrs={'http-equiv': 'refresh'})['content'].partition('url=')[2]]
     # Find the canonical urls with method amp-canurl
     elif method == CanonicalType.CANURL:
         can_urls = get_can_urls(r.soup.find_all(a='amp-canurl'), 'href', url=url)
@@ -38,9 +37,9 @@ def get_canonical_with_soup(r, url, method, guess_and_check=False):
     # Find the canonical urls with method bing cururl
     elif method == CanonicalType.BING_ORIGINAL_URL:
         if '/amp/s/' in r.current_url and 'www.bing.' in r.current_url:
-            cururl = get_can_url_with_regex(r.soup, re.compile("([\'|\"])originalUrl\\1\\s?:\\s?\\1(.*?)\\1"))
-            if cururl:
-                can_urls = [cururl]
+            cur_url = get_can_url_with_regex(r.soup, re.compile("([\'|\"])originalUrl\\1\\s?:\\s?\\1(.*?)\\1"))
+            if cur_url:
+                can_urls = [cur_url]
 
     # Find the canonical urls with method schema_mainentity
     elif method == CanonicalType.SCHEMA_MAINENTITY:
@@ -51,9 +50,9 @@ def get_canonical_with_soup(r, url, method, guess_and_check=False):
     # Find the canonical urls with method page tco_pagetitle
     elif method == CanonicalType.TCO_PAGETITLE:
         if 'https://t.co' in r.current_url and 'amp=1' in r.current_url:
-            pagetitle = r.title
-            if pagetitle:
-                can_urls = [pagetitle]
+            page_title = r.title
+            if page_title:
+                can_urls = [page_title]
 
     elif method == CanonicalType.GUESS_AND_CHECK:
         if guess_and_check:
@@ -104,7 +103,7 @@ def get_can_url_with_guess_and_check(url):
                 guessed_page = utils.get_page(guessed_url)
                 if guessed_page:
                     if guessed_page.status_code == 200:
-                        article_similarity = utils.get_article_similarity(url, guessed_url)
+                        article_similarity = utls.get_article_similarity(url, guessed_url)
                         if article_similarity > 0.6:
                             return guessed_url
                         elif article_similarity > 0.35:

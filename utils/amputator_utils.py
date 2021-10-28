@@ -1,5 +1,4 @@
 import sys
-import traceback
 from difflib import SequenceMatcher
 from random import choice
 
@@ -11,9 +10,10 @@ from tldextract import tldextract
 from urlextract import URLExtract
 from validators import ValidationFailure
 
-from amputator.helpers.canonical_methods import get_canonical_with_soup
-from amputator.models.link import Link, Canonical, CanonicalType
-from amputator.models.page import Page
+from modules.amputator.canonical_methods import get_canonical_with_soup
+from modules.amputator.models.link import Link, Canonical, CanonicalType
+from modules.amputator.models.page import Page
+
 
 # Get all the URLs from the body
 def get_urls(body):
@@ -89,7 +89,7 @@ def check_if_amp(string):
 
     # Detect if the string contains common AMP keywords
     amp_keywords = ["/amp", "amp/", ".amp", "amp.", "?amp", "amp?", "=amp",
-                "amp=", "&amp", "amp&", "%amp", "amp%", "_amp", "amp_"]
+                    "amp=", "&amp", "amp&", "%amp", "amp%", "_amp", "amp_"]
 
     return any(map(string.__contains__, amp_keywords))
 
@@ -200,9 +200,12 @@ def get_page(url):
 # This is done to prevent 403 errors.
 def random_headers():
     return {
-        'User-Agent': choice(['Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3202.84 Mobile Safari/537.36',
-           'Mozilla/5.0 (Linux; Android 9; CLT-L29) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3945.116 Mobile Safari/537.36']
-        ),
+        'User-Agent': choice([
+                                 'Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, '
+                                 'like Gecko) Chrome/61.0.3202.84 Mobile Safari/537.36',
+                                 'Mozilla/5.0 (Linux; Android 9; CLT-L29) AppleWebKit/537.36 (KHTML, like Gecko) '
+                                 'Chrome/78.0.3945.116 Mobile Safari/537.36']
+                             ),
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Accept-Language': 'en-US'
     }
@@ -220,17 +223,25 @@ def check_if_ide():
 def get_article_similarity(url1, url2, log_articles=False):
     try:
         # Download and parse first article
-        article1 = Article(url1, browser_user_agent=choice(['Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3202.84 Mobile Safari/537.36',
-           'Mozilla/5.0 (Linux; Android 9; CLT-L29) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3945.116 Mobile Safari/537.36']
-        ))
+        article1 = Article(url1, browser_user_agent=choice(['Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) '
+                                                            'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                            'Chrome/61.0.3202.84 Mobile Safari/537.36',
+                                                            'Mozilla/5.0 (Linux; Android 9; CLT-L29) '
+                                                            'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                            'Chrome/78.0.3945.116 Mobile Safari/537.36']
+                                                           ))
         article1.download()
         article1.parse()
         article1_text = article1.text
 
         # Download and parse second article
-        article2 = Article(url2, browser_user_agent=choice(['Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3202.84 Mobile Safari/537.36',
-           'Mozilla/5.0 (Linux; Android 9; CLT-L29) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3945.116 Mobile Safari/537.36']
-        ))
+        article2 = Article(url2, browser_user_agent=choice(['Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) '
+                                                            'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                            'Chrome/61.0.3202.84 Mobile Safari/537.36',
+                                                            'Mozilla/5.0 (Linux; Android 9; CLT-L29) '
+                                                            'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                            'Chrome/78.0.3945.116 Mobile Safari/537.36']
+                                                           ))
         article2.download()
         article2.parse()
         article2_text = article2.text

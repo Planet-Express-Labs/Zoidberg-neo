@@ -12,3 +12,9 @@ tldextract
 urlextract
 validators
 lxml
+wavelink
+humanize
+ffmpeg-python
+imagehash
+art
+beanie

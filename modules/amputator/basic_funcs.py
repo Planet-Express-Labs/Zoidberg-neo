@@ -1,4 +1,4 @@
-from amputator.helpers.utils import get_urls, get_urls_info, check_if_amp
+from utils.amputator_utils import get_urls, get_urls_info, check_if_amp
 
 def generate_message(links):
     # Initialize all variables
