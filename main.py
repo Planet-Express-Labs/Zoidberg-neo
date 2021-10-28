@@ -7,6 +7,7 @@ from disnake.ext import commands
 from zoidberg.config import *
 import motor.motor_asyncio
 
+__version__ = "3.0 PRE"
 
 # define activity, playing status
 activity = disnake.Activity(name='> planetexpresslabs.io', type=disnake.ActivityType.playing)
