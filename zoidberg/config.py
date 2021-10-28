@@ -32,8 +32,5 @@ else:
     LL_NODES = ast.literal_eval = config.get("Bot", "lavalink_nodes")
 
     DB_LOCALHOST = bool(config.get("DB", "use_localhost"))
-    if not DB_LOCALHOST:
-        CONNURL = config.get("DB", "connection_url")
-    else:
-        CONNURL = None
+    CONNURL = config.get("DB", "connection_url")
     DISABLED_COGS = config.get("Bot","disabled_cogs").split(", ")
