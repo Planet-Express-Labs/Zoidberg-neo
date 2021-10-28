@@ -1,9 +1,0 @@
-beautifulsoup4
-Flask
-jsonschema
-newspaper3k
-PyYAML
-requests
-tldextract
-urlextract
-validators
