@@ -36,3 +36,4 @@ else:
         CONNURL = config.get("DB", "connection_url")
     else:
         CONNURL = None
+    DISABLED_COGS = config.get("Bot","disabled_cogs").split(", ")

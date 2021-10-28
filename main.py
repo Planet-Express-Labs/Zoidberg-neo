@@ -19,8 +19,7 @@ bot = commands.Bot(command_prefix='-=',
                    intents=intents,
                    test_guilds=[842987183588507670])
 
-# enable torturing if you hate yourself, and everyone in your server
-disabled_cogs = ['torture.py', 'image_filtering.py']
+disabled_cogs = DISABLED_COGS
 logging.basicConfig(level=logging.INFO)
 for filename in os.listdir("cogs"):
     if filename.endswith(".py") and filename not in disabled_cogs:
