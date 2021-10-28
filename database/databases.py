@@ -7,7 +7,7 @@ from main import bot
 
 
 class Server(Document):
-    _server_id: int
+    server_id: int
     preferred_name: str
     roles: dict
 
@@ -23,7 +23,7 @@ class Server(Document):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        server = bot.get_guild(self._server_id)
+        server = bot.get_guild(self.server_id)
 
 
 class User(Document):
