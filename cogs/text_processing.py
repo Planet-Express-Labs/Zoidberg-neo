@@ -28,7 +28,7 @@ class Text_Processor(commands.Cog):
             Option("target", "Language to proofread in (default: en-US)", OptionType.string)
         ]
     )
-    async def proofread(self, ctx, text, target="auto"):
+    async def cmd_proofread(self, ctx, text, target="auto"):
         prefix = ''
         if target != "auto":
             langs = pycountry.languages
@@ -52,7 +52,7 @@ class Text_Processor(commands.Cog):
             Option("target", "Language to translate to (default: en)", OptionType.string)
         ]
     )
-    async def translate(self, ctx, text, target="en"):
+    async def cmd_translate(self, ctx, text, target="en"):
         langs = pycountry.languages
         target = langs.lookup(target).alpha_2
         prefix = ''
@@ -67,7 +67,7 @@ class Text_Processor(commands.Cog):
 
     # PING REPLIES
     @commands.command(name="proofread")
-    async def proofread(self, ctx):
+    async def rep_proofread(self, ctx):
         ref = ctx.message.reference
         if ref is not None and ref.resolved:
             replied_to = await ctx.channel.fetch_message(ref.message_id)
@@ -82,7 +82,7 @@ class Text_Processor(commands.Cog):
             await replied_to.reply(corrected, mention_author=False)
 
     @commands.command(name="translate")
-    async def translate(self, ctx):
+    async def rep_translate(self, ctx):
         ref = ctx.message.reference
         if ref is not None and ref.resolved:
             replied_to = await ctx.channel.fetch_message(ref.message_id)
