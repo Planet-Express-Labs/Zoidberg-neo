@@ -15,14 +15,15 @@ class Images(commands.Cog):
                                 Option("url", "the image you want to tenderize", type=OptionType.string),
                                 Option("saturation-amount", "how much to tenderize the image", type=OptionType.integer)
                             ])
-    async def cmd_tenderize(self, ctx, url, saturation=10000):
-        # if not find_url(url):
-        #     return await ctx.response.send_message("I can't find a valid URL. ")
+    async def cmd_tenderize(self, ctx, url, saturation_amount=10000):
+        url = find_url(url)
+        if url is not None:
+            return await ctx.response.send_message("I can't find a valid URL. ")
         image = ffmpeg.input(url)
-        image = ffmpeg.hue(image, s=saturation)
+        image = ffmpeg.hue(image, s=saturation_amount)
         ffmpeg.output(image, 'temp.jpg').run()
-        with open('temp.jpg', 'rb') as video:
-            df = disnake.File(video)
+        with open('temp.jpg', 'rb') as export:
+            df = disnake.File(export)
             await ctx.response.send_message("Here's your spicy, tender image:", file=df)
         os.remove('temp.jpg')
 

@@ -16,3 +16,5 @@ ffmpeg-python
 imagehash
 art
 beanie
+async-google-trans-new
+pycountry
