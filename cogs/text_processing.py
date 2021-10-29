@@ -58,7 +58,7 @@ class Text_Processor(commands.Cog):
         await ctx.response.send_message(prefix + text)
 
     @commands.command(name="proofread")
-    async def proofread(self, ctx):
+    async def proofread_reply(self, ctx):
         ref = ctx.message.reference
         if ref is not None and ref.resolved:
             replied_to = await ctx.channel.fetch_message(ref.message_id)
@@ -73,7 +73,7 @@ class Text_Processor(commands.Cog):
             await replied_to.reply(corrected, mention_author=False)
 
     @commands.command(name="translate")
-    async def translate(self, ctx):
+    async def translate_reply(self, ctx):
         ref = ctx.message.reference
         if ref is not None and ref.resolved:
             replied_to = await ctx.channel.fetch_message(ref.message_id)
