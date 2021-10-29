@@ -10,7 +10,7 @@ import requests
 from async_google_trans_new import AsyncTranslator
 from async_google_trans_new.constant import LANGUAGES
 
-class Language_Tool(commands.Cog):
+class Text_Processor(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ltool_codes = ['auto']+[lang['longCode'].lower() for lang in requests.get("https://api.languagetoolplus.com/v2/languages").json()]
@@ -57,5 +57,31 @@ class Language_Tool(commands.Cog):
         text = await self.translator.translate(text, lang)
         await ctx.response.send_message(prefix + text)
 
+    @commands.command(name="proofread")
+    async def proofread(self, ctx):
+        ref = ctx.message.reference
+        if ref is not None and ref.resolved:
+            replied_to = await ctx.channel.fetch_message(ref.message_id)
+            text = replied_to.content
+            if not text:
+                return
+            matches = await get_matches(text, "en")
+            if len(matches) == 0:
+                await replied_to.reply("No problems were detected with your text!", mention_author=False)
+                return
+            corrected = correct(text, matches)
+            await replied_to.reply(corrected, mention_author=False)
+
+    @commands.command(name="translate")
+    async def translate(self, ctx):
+        ref = ctx.message.reference
+        if ref is not None and ref.resolved:
+            replied_to = await ctx.channel.fetch_message(ref.message_id)
+            text = replied_to.content
+            if not text:
+                return
+            translated = await self.translator.translate(text, "en")
+            await replied_to.reply(translated, mention_author=False)
+
 def setup(bot):
-    bot.add_cog(Language_Tool(bot))
+    bot.add_cog(Text_Processor(bot))
