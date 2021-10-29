@@ -33,4 +33,6 @@ else:
 
     DB_LOCALHOST = bool(config.get("DB", "use_localhost"))
     CONNURL = config.get("DB", "connection_url")
-    DISABLED_COGS = config.get("Bot","disabled_cogs").split(", ")
+    DISABLED_COGS = config.get("Bot", "disabled_cogs").split(", ")
+
+    HASTE_URL = config.get("API", "hastebin_url")

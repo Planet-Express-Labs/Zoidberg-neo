@@ -17,6 +17,10 @@ class Server(Document):
     image_filtering_roles: list
     image_filtering_nsfw: bool
 
+    # TEXT FILTERING
+    filter_long_text: bool
+    filter_long_text_limit: int = 100
+
     # Misc
     enable_amptuator: bool
     disabled_modules: list

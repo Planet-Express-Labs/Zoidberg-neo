@@ -6,6 +6,8 @@ import disnake
 from disnake.ext import commands
 from zoidberg.config import *
 import motor.motor_asyncio
+from beanie import init_beanie
+from database.databases import *
 
 __version__ = "3.0 PRE"
 
@@ -14,10 +16,10 @@ activity = disnake.Activity(name='> planetexpresslabs.io', type=disnake.Activity
 # define gateway intents
 intents = disnake.Intents.default()
 intents.members = True
-print(TEST_GUILDS)
 bot = commands.Bot(command_prefix=commands.when_mentioned,
                    activity=activity,
                    intents=intents,
+                   # TODO place this the config file once again.
                    test_guilds=[842987183588507670])
 
 disabled_cogs = DISABLED_COGS
@@ -33,7 +35,10 @@ else:
 
 @bot.event
 async def on_ready():
-    print(f"Bot is ready: logged in as {bot.user.name} ({bot.user.id})")
+    # Initialize our databases
+    await init_beanie(database=mongo_client.db_name, document_models=[Server])
+
+    print(f"Bot is ready, logged in as {bot.user.name} ({bot.user.id}).")
     await bot.wait_until_ready()
 
 
