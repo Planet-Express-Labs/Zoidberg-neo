@@ -15,7 +15,7 @@ activity = disnake.Activity(name='> planetexpresslabs.io', type=disnake.Activity
 intents = disnake.Intents.default()
 intents.members = True
 print(TEST_GUILDS)
-bot = commands.Bot(command_prefix='-=',
+bot = commands.Bot(command_prefix=commands.when_mentioned,
                    activity=activity,
                    intents=intents,
                    test_guilds=[842987183588507670])
