@@ -6,7 +6,7 @@ import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
 from utils.languagetool_utils import get_matches, correct
-import requests
+import requests_async as requests
 from async_google_trans_new import AsyncTranslator
 from async_google_trans_new.constant import LANGUAGES
 import pycountry
@@ -16,7 +16,7 @@ class Text_Processor(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ltool_codes = ['auto'] + [lang['longCode'].lower() for lang in
-                                       requests.get("https://api.languagetoolplus.com/v2/languages").json()]
+                                       (await requests.get("https://api.languagetoolplus.com/v2/languages")).json()]
         self.translate_langs = LANGUAGES
         self.translator = AsyncTranslator()
 
@@ -34,8 +34,8 @@ class Text_Processor(commands.Cog):
             langs = pycountry.languages
             target = langs.lookup(target).alpha_2
             if target not in self.ltool_codes:
-                prefix = f"It seems that your selected language ({target}) is not supported. Language codes should be " \
-                         f"formatted by locale (eg. en-US or fr). Falling back to Automatic.\n\n "
+                prefix = f"It seems that your selected language ({target}) is not supported. Language codes should be" \
+                         f" formatted by locale (eg. en-US or fr). Falling back to Automatic.\n\n "
                 target = "auto"
         matches = await get_matches(text, target)
         if len(matches) == 0:
