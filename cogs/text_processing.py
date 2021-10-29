@@ -47,12 +47,12 @@ class Text_Processor(commands.Cog):
     @commands.slash_command(
         name="translate",
         description="Translates text to a new language!",
-        options=[
-            Option("text", "The text to translate", OptionType.string, required=True),
-            Option("target", "Language to translate to (default: en)", OptionType.string)
-        ]
     )
-    async def cmd_translate(self, ctx, text, target="en"):
+    async def cmd_translate(self, ctx,
+                            text: str = commands.Param(desc="Text to translate"),
+                            target: str = commands.Param(desc="Language to translate to (English default)",
+                                                         default="en")
+                            ):
         langs = pycountry.languages
         target = langs.lookup(target).alpha_2
         prefix = ''
@@ -91,7 +91,7 @@ class Text_Processor(commands.Cog):
                 return
             translated = await self.translator.translate(text, "en")
             await replied_to.reply(translated, mention_author=False)
-
+    
 
 def setup(bot):
     bot.add_cog(Text_Processor(bot))
