@@ -8,17 +8,19 @@ import configparser
 import logging
 import os
 import ast
+from pathlib import Path
 
 log = logging.getLogger(__name__)
+config_path = p = Path('config/config.ini')
 
-if not os.path.exists(os.getcwd() + "\\config\\config.ini"):
+if not os.path.exists(config_path):
     print("Cannot find config file in /config/config.ini! Trying to load from environment variables... ")
     # TODO: make less bad
     LL_NODES = ast.literal_eval(os.getenv("zoidberg_full_nodes"))
     BOT_TOKEN = os.getenv("FRONTMAN_TOKEN")
 
 else:
-    config_file = os.getcwd() + "\\config\\config.ini"
+    config_file = config_path
     config = configparser.ConfigParser()
     config.read_file(codecs.open(config_file, "r+", "utf-8"))
 
