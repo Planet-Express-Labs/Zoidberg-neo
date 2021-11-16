@@ -3,7 +3,6 @@ from typing import Optional
 from pydantic import BaseModel
 from beanie import Document, Indexed, init_beanie
 import asyncio, motor
-from main import bot
 
 
 class Server(Document):
@@ -27,7 +26,6 @@ class Server(Document):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        server = bot.get_guild(self.server_id)
 
 
 class User(Document):
