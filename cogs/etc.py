@@ -2,14 +2,9 @@
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
 # As long as you are using my code in good faith, we will probably not have an issue with it.
-from typing import ParamSpec
 import disnake
 from disnake.ext import commands
 import art
-from utils.regex_patterns import find_url
-import ffmpeg
-import os
-
 
 class Etc(commands.Cog):
     def __init__(self, bot):
