@@ -6,8 +6,6 @@ import asyncio
 from time import sleep
 
 import disnake
-import threading
-
 from disnake import ApplicationCommandInteraction
 from disnake.enums import *
 from disnake.ext import commands
@@ -18,9 +16,14 @@ from main import bot
 
 
 async def wait_for_text_input(inter: ApplicationCommandInteraction):
+    skip = False
 
     @disnake.ui.button(label="Skip", style=ButtonStyle.red)
     async def skip_button():
+        global skip
+        skip = True
+
+    if skip:
         return
 
     def check(m):
@@ -37,9 +40,33 @@ async def wait_for_text_input(inter: ApplicationCommandInteraction):
 
 
 async def image_filtering_menu(inter: ApplicationCommandInteraction):
+    server = await databases.Server.find_all(databases.Server.server_id == inter.guild.id)
+    if server is None:
+        server = databases.Server(server_id=inter.guild.id)
+        await server.insert()
+    skip = False
+
 
     @disnake.ui.button(label="Skip", style=ButtonStyle.red)
     async def skip_button():
+        global skip
+        skip = True
+
+    @disnake.ui.button(label="Enable image filtering")
+    async def enable_img_filtering():
+        server.image_filtering = not server.image_filtering
+        server.save()
+        await image_filtering_menu(inter)
+
+    async def refresh_buttons():
+        if server.image_filtering:
+            await enable_img_filtering.set_label("Disable image filtering")
+            await enable_img_filtering.set_style(ButtonStyle.red)
+        else:
+            await enable_img_filtering.set_label("Enable image filtering")
+            await enable_img_filtering.set_style(ButtonStyle.green)
+            
+    if skip:
         return
 
     def check(m):
@@ -63,10 +90,10 @@ async def first_time(inter):
         I can automatically delete images that I detect as NSFW, detect spam, and more.
         This wizard will help you configure all of Zoidberg's options.
         I'll update you if we add anything new in your community updates channel.
-        
+
         Each option will have either a button or a text option that I will listen for.
         If you don't want to specify an option, click the skip button.
-        
+
         Send the message "next" to progress onto the next screen.
         1/4
         """
@@ -78,7 +105,8 @@ async def first_time(inter):
         Commonly found NSFW images are stored in a database to reduce load.
         We do not store copies of images that are detected, only a hash that can't be turned back into an image.
 
-        AI Filtering uses advanced AI to detect NSFW images. This includes images containing gore.
+        AI Filtering uses advanced AI to detect NSFW images. This includes images containing gore and may falsely detect images of medical procedures.
+        At the moment, this cannot be disabled.
             This feature will send a copy of any new image, in enabled channels, to our image processing partners.
 
         Hash filtering uses our database to detect common images that may not be detected by AI.
@@ -87,6 +115,7 @@ async def first_time(inter):
         You can configure which channels will use this filter on the next page.
         2/4"""
     await resp.edit(embed=embed)
+    await wait_for_text_input(inter)
 
 
 class Configuration(commands.Cog):
