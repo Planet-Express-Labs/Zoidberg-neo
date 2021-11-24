@@ -27,6 +27,7 @@ for filename in os.listdir("cogs"):
     if filename.endswith(".py") and filename not in DISABLED_COGS:
         bot.load_extension(f"cogs.{filename[:-3]}")
 if DB_LOCALHOST:
+if DB_LOCALHOST == "True":
     mongo_client = motor.motor_asyncio.AsyncIOMotorClient('localhost', 27017)
 else:
     mongo_client = motor.motor_asyncio.AsyncIOMotorClient(CONNURL)
