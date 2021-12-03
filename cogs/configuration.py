@@ -33,19 +33,23 @@ async def wait_for_text_input(inter: ApplicationCommandInteraction):
 
     # await inter.response.defer()
     message = await inter.channel.send("Waiting for response...")
+    resp = None
     try:
         resp = await bot.wait_for('message', check=check)
+        await message.delete()
     except asyncio.TimeoutError:
         await inter.response.send_message("Timeout reached. Try again. ")
+    if resp is None:
+        await inter.response.send_message("Something went wrong. Try again, and if this keeps happening, "
+                                          "file a bug report.")
 
 
 async def image_filtering_menu(inter: ApplicationCommandInteraction):
-    server = await databases.Server.find_all(databases.Server.server_id == inter.guild.id)
+    server = databases.Server.find_all(databases.Server.server_id == inter.guild.id)
     if server is None:
         server = databases.Server(server_id=inter.guild.id)
         await server.insert()
     skip = False
-
 
     @disnake.ui.button(label="Skip", style=ButtonStyle.red)
     async def skip_button():
@@ -55,17 +59,20 @@ async def image_filtering_menu(inter: ApplicationCommandInteraction):
     @disnake.ui.button(label="Enable image filtering")
     async def enable_img_filtering():
         server.image_filtering = not server.image_filtering
-        server.save()
+        await server.save()
+        if server.image_filtering:
+            enable_img_filtering.set_label("Disable image filtering")
+            enable_img_filtering.set_style(ButtonStyle.red)
+        else:
+            enable_img_filtering.set_label("Enable image filtering")
+            enable_img_filtering.set_style(ButtonStyle.green)
+
+    @disnake.ui.button(label="Enable image filtering")
+    async def enable_img_filtering():
+        server.image_filtering = not server.image_filtering
+        await server.save()
         await image_filtering_menu(inter)
 
-    async def refresh_buttons():
-        if server.image_filtering:
-            await enable_img_filtering.set_label("Disable image filtering")
-            await enable_img_filtering.set_style(ButtonStyle.red)
-        else:
-            await enable_img_filtering.set_label("Enable image filtering")
-            await enable_img_filtering.set_style(ButtonStyle.green)
-            
     if skip:
         return
 
@@ -97,7 +104,7 @@ async def first_time(inter):
         Send the message "next" to progress onto the next screen.
         1/4
         """
-    resp = await inter.response.send_message(embed=embed)
+    await inter.response.send_message(embed=embed)
     await wait_for_text_input(inter)
     embed.description = """
         Would you like to enable image filtering? We use state of the art AI models to detect NSFW images.
@@ -105,16 +112,16 @@ async def first_time(inter):
         Commonly found NSFW images are stored in a database to reduce load.
         We do not store copies of images that are detected, only a hash that can't be turned back into an image.
 
-        AI Filtering uses advanced AI to detect NSFW images. This includes images containing gore and may falsely detect images of medical procedures.
-        At the moment, this cannot be disabled.
-            This feature will send a copy of any new image, in enabled channels, to our image processing partners.
+        AI Filtering uses advanced AI to detect NSFW images. This includes images containing gore and may falsely 
+        detect images of medical procedures. At the moment, this cannot be disabled. This feature will send a copy of 
+        any new image, in enabled channels, to our image processing partners. 
 
         Hash filtering uses our database to detect common images that may not be detected by AI.
         These images usually don't contain nudity, but are still extremely suggestive
 
         You can configure which channels will use this filter on the next page.
         2/4"""
-    await resp.edit(embed=embed)
+    await inter.edit_original_message(embed=embed)
     await wait_for_text_input(inter)
 
 
