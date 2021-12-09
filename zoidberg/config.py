@@ -40,4 +40,6 @@ else:
 
     HASTE_URL = config.get("API", "hastebin_url")
 
+    ADMIN_ID = config.get("Bot", "admin_ids").split(", ")
+
     openai.api_key = config.get("AI", "openai_api_key")
