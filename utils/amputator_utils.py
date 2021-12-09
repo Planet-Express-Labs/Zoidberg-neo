@@ -10,9 +10,9 @@ from tldextract import tldextract
 from urlextract import URLExtract
 from validators import ValidationFailure
 
-from modules.amputator.canonical_methods import get_canonical_with_soup
-from modules.amputator.models.link import Link, Canonical, CanonicalType
-from modules.amputator.models.page import Page
+from utils.amputator.canonical_methods import get_canonical_with_soup
+from utils.amputator.models.link import Link, Canonical, CanonicalType
+from utils.amputator.models.page import Page
 
 
 # Get all the URLs from the body

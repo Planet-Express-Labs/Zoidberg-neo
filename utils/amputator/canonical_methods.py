@@ -2,7 +2,7 @@ import re
 from urllib.parse import urlparse
 
 from utils import amputator_utils as utils
-from modules.amputator.models.link import CanonicalType
+from utils.amputator.models.link import CanonicalType
 
 
 # Try to find the canonical url by scanning for the specified tag

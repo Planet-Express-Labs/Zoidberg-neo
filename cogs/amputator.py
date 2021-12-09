@@ -5,7 +5,7 @@
 import disnake
 from disnake.ext import commands
 from utils.amputator_utils import check_if_amp
-from modules.amputator.basic_funcs import get_reply
+from utils.amputator.basic_funcs import get_reply
 
 
 class Amputator(commands.Cog):
