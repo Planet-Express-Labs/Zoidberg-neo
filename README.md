@@ -1,5 +1,5 @@
 # Zoidberg-Neo
-Moderation first discord bot built using Disnake.py.
+AI moderation discord bot built using Disnake.
 
 # Cogs
 ## Amputator
@@ -12,10 +12,5 @@ Introduces basic moderation functionality (kicks, bans, sending embeds, and mess
 
 ---
 
-## Stonks
-Adds commands to check current prices for stocks/cryptocurrencies. Stocks use Yahoo Finance API, Cryptocurrencies use CoinGecko.
-
----
-
-## Torture
-Adds the ability to torture select members of your guild. Whenever it detects a tortured user is typing, it pings them and asks what they're writing. This cog is disabled by default, for obviosu reasons. 
+## Stocks
+Adds commands to check current prices for stocks/cryptocurrencies. Stocks use Yahoo Finance API, Cryptocurrencies use CoinGecko. This is intended for reference purposes only, inacurrate price listings may occur, however has not been found to happen while testing. 
