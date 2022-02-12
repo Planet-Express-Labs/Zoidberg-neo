@@ -66,6 +66,7 @@ async def image_filtering_menu(inter: ApplicationCommandInteraction):
         else:
             enable_img_filtering.set_label("Enable image filtering")
             enable_img_filtering.set_style(ButtonStyle.green)
+        await image_filtering_menu(inter)
 
     @disnake.ui.button(label="Enable image filtering")
     async def enable_img_filtering():
@@ -122,7 +123,12 @@ async def first_time(inter):
         You can configure which channels will use this filter on the next page.
         2/4"""
     await inter.edit_original_message(embed=embed)
-    await wait_for_text_input(inter)
+    await image_filtering_menu(inter)
+    embed.description = """
+        I can look for NSFW images in certain channels. By default, I don't scan NSFW channels.
+        I also can ignore certain roles.
+        
+    """
 
 
 class Configuration(commands.Cog):

@@ -58,6 +58,6 @@ async def cmdadmin_resetcogs(ctx):
             bot.unload_extension(cog)
             bot.load_extension(cog)
     return await ctx.reply("Cogs reset.")
-
+    
 
 bot.run(BOT_TOKEN)
